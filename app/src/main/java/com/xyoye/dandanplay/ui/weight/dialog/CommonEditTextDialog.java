@@ -42,6 +42,7 @@ public class CommonEditTextDialog extends Dialog implements Lifeful {
     public static final int REMOTE_TOKEN = 3;
     public static final int MAX_DOWNLOAD_RATE = 4;
     public static final int SAVE_SHOOTER_API_SECRET = 5;
+    public static final int PC_FILE_BROWSER_IP = 6;
 
     @BindView(R.id.edit_layout)
     TextInputLayout inputLayout;
@@ -117,6 +118,11 @@ public class CommonEditTextDialog extends Dialog implements Lifeful {
             case SAVE_SHOOTER_API_SECRET:
                 titleTv.setText("API密钥");
                 editText.setHint("请输入射手（伪）网API密钥");
+                editText.setMaxLines(1);
+                break;
+            case PC_FILE_BROWSER_IP:
+                titleTv.setText("IP地址");
+                editText.setHint("请输入IP地址（仅本次连接有效）");
                 editText.setMaxLines(1);
                 break;
         }
@@ -242,6 +248,15 @@ public class CommonEditTextDialog extends Dialog implements Lifeful {
                 } else if (inputData.length() != 32) {
                     inputLayout.setErrorEnabled(true);
                     inputLayout.setError("请输入32位API密钥");
+                } else if (listener != null) {
+                    listener.onConfirm(inputData);
+                    CommonEditTextDialog.this.dismiss();
+                }
+                break;
+            case PC_FILE_BROWSER_IP:
+                if (StringUtils.isEmpty(inputData)) {
+                    inputLayout.setErrorEnabled(true);
+                    inputLayout.setError("请输入IP地址");
                 } else if (listener != null) {
                     listener.onConfirm(inputData);
                     CommonEditTextDialog.this.dismiss();

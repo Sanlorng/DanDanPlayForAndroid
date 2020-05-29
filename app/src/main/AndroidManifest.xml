@@ -160,6 +160,10 @@
         <activity
             android:name=".ui.activities.personal.CrashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+        <!-- PC文件浏览器界面 -->
+        <activity
+            android:name=".ui.activities.play.PFBActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"

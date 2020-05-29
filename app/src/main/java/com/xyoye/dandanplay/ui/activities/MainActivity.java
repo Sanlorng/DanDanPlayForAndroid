@@ -25,6 +25,7 @@ import com.xyoye.dandanplay.mvp.impl.MainPresenterImpl;
 import com.xyoye.dandanplay.mvp.presenter.MainPresenter;
 import com.xyoye.dandanplay.mvp.view.MainView;
 import com.xyoye.dandanplay.service.TorrentService;
+import com.xyoye.dandanplay.ui.activities.play.PFBActivity;
 import com.xyoye.dandanplay.ui.activities.smb.SmbDeviceActivity;
 import com.xyoye.dandanplay.ui.fragment.HomeFragment;
 import com.xyoye.dandanplay.ui.fragment.PersonalFragment;
@@ -49,7 +50,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     private PersonalFragment personalFragment;
     private BaseMvpFragment previousFragment;
 
-    private MenuItem menuSmbItem, menuNetItem, menuRemoteItem;
+    private MenuItem menuSmbItem, menuNetItem, menuRemoteItem, menuPFBItem;
 
     private long touchTime = 0;
 
@@ -138,6 +139,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                     menuSmbItem.setVisible(false);
                     menuNetItem.setVisible(false);
                     menuRemoteItem.setVisible(false);
+                    menuPFBItem.setVisible(false);
                     return true;
                 case R.id.navigation_play:
                     setTitle("媒体库");
@@ -145,6 +147,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                     menuSmbItem.setVisible(true);
                     menuNetItem.setVisible(true);
                     menuRemoteItem.setVisible(true);
+                    menuPFBItem.setVisible(true);
                     return true;
                 case R.id.navigation_personal:
                     setTitle("个人中心");
@@ -152,6 +155,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
                     menuSmbItem.setVisible(false);
                     menuNetItem.setVisible(false);
                     menuRemoteItem.setVisible(false);
+                    menuPFBItem.setVisible(false);
                     return true;
             }
             return false;
@@ -180,9 +184,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
         menuSmbItem = menu.findItem(R.id.menu_item_smb);
         menuNetItem = menu.findItem(R.id.menu_item_network);
         menuRemoteItem = menu.findItem(R.id.menu_item_remote);
+        menuPFBItem = menu.findItem(R.id.menu_item_pfb);
         menuSmbItem.setVisible(true);
         menuNetItem.setVisible(true);
         menuRemoteItem.setVisible(true);
+        menuPFBItem.setVisible(true);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -200,6 +206,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             //远程访问
             case R.id.menu_item_remote:
                 new RemoteDialog(this).show();
+                break;
+            //PC文件浏览器
+            case R.id.menu_item_pfb:
+                launchActivity(PFBActivity.class);
                 break;
         }
         return super.onOptionsItemSelected(item);

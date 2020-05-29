@@ -33,6 +33,7 @@ public class RemoteScanActivity extends BaseMvcActivity implements QRCodeReaderV
     TextView titleTv;
 
     private boolean isScanOver = false;
+    private boolean isPFBScan = false;
 
     @Override
     protected int initPageLayoutID() {
@@ -51,6 +52,9 @@ public class RemoteScanActivity extends BaseMvcActivity implements QRCodeReaderV
         }
 
         setTitle("扫一扫");
+
+        isPFBScan = getIntent().getBooleanExtra("pfb_scan", false);
+
         qrCodeReaderView.setAutofocusInterval(2000L);
         qrCodeReaderView.setOnQRCodeReadListener(this);
         qrCodeReaderView.setBackCamera();
@@ -90,15 +94,22 @@ public class RemoteScanActivity extends BaseMvcActivity implements QRCodeReaderV
     public void onQRCodeRead(String result, PointF[] points) {
         if (!TextUtils.isEmpty(result) && !isScanOver) {
             isScanOver = true;
-            RemoteScanBean scanBean = JsonUtils.fromJson(result, RemoteScanBean.class);
-            if (scanBean != null && scanBean.getIp() != null && scanBean.getIp().size() != 0){
-                Intent intent = new Intent(this, RemoteActivity.class);
-                intent.putExtra("remote_data", scanBean);
-                startActivity(intent);
-                RemoteScanActivity.this.finish();
-            }else {
-                ToastUtils.showShort("错误，无法从该二维码读取远程访问数据");
-                isScanOver = false;
+            if (isPFBScan){
+                Intent intent = new Intent();
+                intent.putExtra("scan_result_data", result);
+                setResult(RESULT_OK, intent);
+                finish();
+            } else {
+                RemoteScanBean scanBean = JsonUtils.fromJson(result, RemoteScanBean.class);
+                if (scanBean != null && scanBean.getIp() != null && scanBean.getIp().size() != 0){
+                    Intent intent = new Intent(this, RemoteActivity.class);
+                    intent.putExtra("remote_data", scanBean);
+                    startActivity(intent);
+                    RemoteScanActivity.this.finish();
+                }else {
+                    ToastUtils.showShort("错误，无法从该二维码读取远程访问数据");
+                    isScanOver = false;
+                }
             }
         }
     }
